@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.row_moview_item.view.*
-import pl.matusiak.data.di.NetworkModule.Companion.IMAGE_URL
+import pl.matusiak.newdata.di.NetworkModule.Companion.IMAGE_URL
 import pl.matusiak.sampleapp.R
 import pl.matusiak.sampleapp.model.MovieUiModel
 

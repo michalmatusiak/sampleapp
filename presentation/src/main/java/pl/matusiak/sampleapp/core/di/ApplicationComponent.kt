@@ -6,8 +6,9 @@ import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
-import pl.matusiak.data.di.NetworkModule
-import pl.matusiak.di.DomainModule
+import pl.matusiak.domain.di.DomainModule
+import pl.matusiak.newdata.di.DataStorageModule
+import pl.matusiak.newdata.di.NetworkModule
 import pl.matusiak.sampleapp.TestApp
 import javax.inject.Singleton
 
@@ -20,7 +21,8 @@ import javax.inject.Singleton
         DomainModule::class,
         AndroidInjectionModule::class,
         FragmentBuilderModule::class,
-        ViewModelModule::class
+        ViewModelModule::class,
+        DataStorageModule::class
     ]
 )
 interface ApplicationComponent : AndroidInjector<DaggerApplication> {

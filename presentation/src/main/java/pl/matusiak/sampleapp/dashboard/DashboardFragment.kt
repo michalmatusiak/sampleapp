@@ -14,15 +14,17 @@ import kotlinx.android.synthetic.main.dashboard_fragment.*
 import pl.matusiak.sampleapp.BR
 import pl.matusiak.sampleapp.R
 import pl.matusiak.sampleapp.core.di.ViewModelFactory
+import pl.matusiak.sampleapp.dashboard.MoviePageListAdapter.MoviesListInteractor
 import pl.matusiak.sampleapp.databinding.DashboardFragmentBinding
 import pl.matusiak.sampleapp.details.MovieDetailsFragment
+import pl.matusiak.sampleapp.details.MovieDetailsInteractor
 import pl.matusiak.sampleapp.model.MovieUiModel
 import pl.matusiak.sampleapp.utils.onTextChanged
 import javax.inject.Inject
 
 
 class DashboardFragment : DaggerFragment(),
-    MoviePageListAdapter.MoviesListInteractor {
+    MoviesListInteractor, MovieDetailsInteractor {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -52,7 +54,17 @@ class DashboardFragment : DaggerFragment(),
         setupDataBindings()
         subscribeUi()
         observeData()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
         viewModel.subscribe()
+    }
+
+    override fun onStop() {
+        viewModel.unsubscribe()
+        super.onStop()
     }
 
     private fun observeData() {
@@ -63,8 +75,7 @@ class DashboardFragment : DaggerFragment(),
         viewModel.suggestionList.observe(viewLifecycleOwner, Observer { it ->
             suggestionAdapter.apply {
                 clear()
-                val map = it.map { it.title }
-                addAll(map)
+                addAll(it.map { it.title })
                 notifyDataSetChanged()
             }
         })
@@ -73,17 +84,6 @@ class DashboardFragment : DaggerFragment(),
     private fun subscribeUi() {
         moviePageListAdapter = MoviePageListAdapter(this)
         recycler.adapter = moviePageListAdapter
-
-        filter = object : Filter() {
-            override fun performFiltering(p0: CharSequence?): FilterResults {
-                TODO("Not yet implemented")
-            }
-
-            override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-                TODO("Not yet implemented")
-            }
-
-        }
 
         suggestionAdapter = ArrayAdapter(
             requireContext(),
@@ -106,20 +106,26 @@ class DashboardFragment : DaggerFragment(),
     }
 
     override fun movieStarClick(movieModel: MovieUiModel) {
-
+        viewModel.starClicked(movieModel)
     }
 
     override fun moviewItemClick(movieModel: MovieUiModel) {
         val supportFragmentManager = activity?.supportFragmentManager
+        val detailsFragment = MovieDetailsFragment.newInstance(movieModel)
         supportFragmentManager?.apply {
             beginTransaction()
                 .add(
                     R.id.fragmentContainer,
-                    MovieDetailsFragment.newInstance(movieModel)
+                    detailsFragment
                 )
                 .addToBackStack(null)
                 .commit()
         }
+        detailsFragment.setDetailsInteractor(this)
+    }
+
+    override fun starInDetailsClicked(movieUiModel: MovieUiModel) {
+        moviePageListAdapter.refreshItem(movieUiModel)
     }
 
 }

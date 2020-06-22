@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.movie_details_fragment.*
-import pl.matusiak.data.di.NetworkModule
+import pl.matusiak.newdata.di.NetworkModule.Companion.IMAGE_URL
 import pl.matusiak.sampleapp.BR
 import pl.matusiak.sampleapp.R
 import pl.matusiak.sampleapp.core.di.ViewModelFactory
@@ -18,7 +18,7 @@ import pl.matusiak.sampleapp.databinding.MovieDetailsFragmentBinding
 import pl.matusiak.sampleapp.model.MovieUiModel
 import javax.inject.Inject
 
-class MovieDetailsFragment : DaggerFragment() {
+class MovieDetailsFragment() : DaggerFragment() {
 
     companion object {
         private const val KEY_MOVIE_MODEL = "movie_model"
@@ -35,6 +35,7 @@ class MovieDetailsFragment : DaggerFragment() {
     lateinit var viewModelFactory: ViewModelFactory
 
     private lateinit var viewDataBinding: MovieDetailsFragmentBinding
+    private lateinit var interactor: MovieDetailsInteractor
 
     private val viewModel by lazy {
         ViewModelProvider(this, viewModelFactory)
@@ -53,6 +54,7 @@ class MovieDetailsFragment : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupDataBindings()
+        viewModel.setInteractor(interactor)
         val movieUiModel = arguments?.getParcelable<MovieUiModel>(KEY_MOVIE_MODEL)
         movieUiModel?.let {
             viewModel.setViewModel(it)
@@ -61,10 +63,18 @@ class MovieDetailsFragment : DaggerFragment() {
         viewModel.imageUrlLiveData.observe(viewLifecycleOwner, Observer {
             Glide
                 .with(requireContext())
-                .load("${NetworkModule.IMAGE_URL}${it}")
+                .load("$IMAGE_URL${it}")
                 .centerCrop()
                 .into(movieAvatarImage)
         })
+
+        viewModel.backButtonClickLiveData.observe(viewLifecycleOwner, Observer {
+            activity?.onBackPressed()
+        })
+    }
+
+    fun setDetailsInteractor(interactor: MovieDetailsInteractor) {
+        this.interactor = interactor
     }
 
     private fun setupDataBindings() {

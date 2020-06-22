@@ -19,8 +19,14 @@ class MoviePageListAdapter(private val interactor: MoviesListInteractor) :
     }
 
     fun setItems(listOf: List<MovieUiModel>) {
+        items.clear()
         items.addAll(listOf)
         notifyDataSetChanged()
+    }
+
+    fun refreshItem(movieUiModel: MovieUiModel) {
+        val movieIndex = items.indexOf(movieUiModel)
+        notifyItemChanged(movieIndex)
     }
 
     interface MoviesListInteractor {

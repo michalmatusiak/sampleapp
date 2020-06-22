@@ -6,6 +6,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.subjects.PublishSubject
+import pl.matusiak.domain.FavouriteMoviesUseCase
 import pl.matusiak.domain.NowPlayingMovieUseCase
 import pl.matusiak.domain.SearchSuggestionUseCase
 import pl.matusiak.sampleapp.core.di.SchedulersProvider
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val getNowPlayingMovieUseCase: NowPlayingMovieUseCase,
     private val searchSuggestionUseCase: SearchSuggestionUseCase,
+    private val favouriteMoviesUseCase: FavouriteMoviesUseCase,
     private val schedulersProvider: SchedulersProvider
 ) : ViewModel() {
 
@@ -40,13 +42,24 @@ class DashboardViewModel @Inject constructor(
     fun searchTextChanged(searchText: CharSequence?) {
         if (!searchText.isNullOrBlank() && !searchText.isNullOrEmpty()) {
             searchSubject.onNext(searchText.toString())
+        } else {
+            getFilms()
+        }
+    }
+
+
+    fun starClicked(movieModel: MovieUiModel) {
+        if (movieModel.isFavourite) {
+            favouriteMoviesUseCase.addFavourite(movieModel.id)
+        } else {
+            favouriteMoviesUseCase.removeFavourite(movieModel.id)
         }
     }
 
     private fun subscribeSearchSubject() {
         searchSubject
-            .debounce(200, TimeUnit.MILLISECONDS)
-            .flatMap {
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .switchMap {
                 searchSuggestionUseCase.search(it)
                     .toObservable()
                     .map { items ->
@@ -61,6 +74,7 @@ class DashboardViewModel @Inject constructor(
             .subscribeBy(
                 onNext = {
                     suggestionList.postValue(it)
+                    movieList.postValue(it)
                 },
                 onError = {
                     Timber.e(it)
@@ -91,5 +105,6 @@ class DashboardViewModel @Inject constructor(
             )
             .addTo(disposables)
     }
+
 
 }

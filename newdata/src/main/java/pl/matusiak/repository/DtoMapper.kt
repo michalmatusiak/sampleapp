@@ -1,8 +1,8 @@
-package pl.matusiak.sampleapp.model
+package pl.matusiak.repository
 
-import pl.matusiak.repository.MovieModel
+import pl.matusiak.model.dto.MovieDto
 
-fun MovieModel.toUiModel() = MovieUiModel(
+fun MovieDto.toModel() = MovieModel(
     forAdult = forAdult,
     backdropImagePath = backdropImagePath,
     id = id,
@@ -11,6 +11,5 @@ fun MovieModel.toUiModel() = MovieUiModel(
     title = title,
     video = video,
     voteAverage = voteAverage,
-    voteCount = voteCount,
-    isFavourite = isFavourite
+    voteCount = voteCount
 )
