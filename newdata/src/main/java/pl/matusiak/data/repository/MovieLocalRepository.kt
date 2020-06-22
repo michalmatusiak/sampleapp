@@ -1,4 +1,4 @@
-package pl.matusiak.repository
+package pl.matusiak.data.repository
 
 interface MovieLocalRepository {
     fun saveMovieToFavourites(movieId: Int)

@@ -1,9 +1,11 @@
-package pl.matusiak.repository
+package pl.matusiak.data.repository
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import io.reactivex.rxjava3.core.Single
-import pl.matusiak.MovieService
+import pl.matusiak.data.network.MovieService
+import pl.matusiak.data.model.appmodel.MovieModel
+import pl.matusiak.data.model.toModel
 
 class MovieRepositoryImpl(
     private val movieService: MovieService,

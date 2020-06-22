@@ -1,4 +1,4 @@
-package pl.matusiak.repository
+package pl.matusiak.data.model.appmodel
 
 data class MovieModel(
     val forAdult: Boolean,

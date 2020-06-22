@@ -1,4 +1,4 @@
-package pl.matusiak.newdata.di
+package pl.matusiak.data.di
 
 import com.google.gson.Gson
 import dagger.Module
@@ -7,8 +7,8 @@ import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import pl.matusiak.AuthInterceptor
-import pl.matusiak.MovieService
+import pl.matusiak.data.network.AuthInterceptor
+import pl.matusiak.data.network.MovieService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit

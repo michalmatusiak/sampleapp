@@ -1,13 +1,13 @@
-package pl.matusiak.newdata.di
+package pl.matusiak.data.di
 
 import android.content.Context
 import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
-import pl.matusiak.MovieService
-import pl.matusiak.repository.MovieLocalRepository
-import pl.matusiak.repository.MovieRemoteRepository
-import pl.matusiak.repository.MovieRepositoryImpl
+import pl.matusiak.data.network.MovieService
+import pl.matusiak.data.repository.MovieLocalRepository
+import pl.matusiak.data.repository.MovieRemoteRepository
+import pl.matusiak.data.repository.MovieRepositoryImpl
 import javax.inject.Singleton
 
 @Module

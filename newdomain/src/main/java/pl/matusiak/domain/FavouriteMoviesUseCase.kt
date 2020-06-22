@@ -1,6 +1,6 @@
 package pl.matusiak.domain
 
-import pl.matusiak.repository.MovieLocalRepository
+import pl.matusiak.data.repository.MovieLocalRepository
 
 class FavouriteMoviesUseCase(private val movieLocalRepository: MovieLocalRepository) {
 

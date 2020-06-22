@@ -7,8 +7,8 @@ import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
 import dagger.android.DaggerApplication
 import pl.matusiak.domain.di.DomainModule
-import pl.matusiak.newdata.di.DataStorageModule
-import pl.matusiak.newdata.di.NetworkModule
+import pl.matusiak.data.di.DataStorageModule
+import pl.matusiak.data.di.NetworkModule
 import pl.matusiak.sampleapp.TestApp
 import javax.inject.Singleton
 

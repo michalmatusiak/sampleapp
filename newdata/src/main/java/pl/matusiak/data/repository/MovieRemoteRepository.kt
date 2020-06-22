@@ -1,6 +1,7 @@
-package pl.matusiak.repository
+package pl.matusiak.data.repository
 
 import io.reactivex.rxjava3.core.Single
+import pl.matusiak.data.model.appmodel.MovieModel
 
 interface MovieRemoteRepository {
 

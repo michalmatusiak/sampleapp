@@ -1,4 +1,4 @@
-package pl.matusiak.model.dto
+package pl.matusiak.data.model.dto
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,7 +1,7 @@
-package pl.matusiak
+package pl.matusiak.data.network
 
 import io.reactivex.rxjava3.core.Single
-import pl.matusiak.model.dto.MovieDtoWrapper
+import pl.matusiak.data.model.dto.MovieDtoWrapper
 import retrofit2.http.GET
 import retrofit2.http.Query
 

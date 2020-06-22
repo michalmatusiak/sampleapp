@@ -1,7 +1,7 @@
 package pl.matusiak.sampleapp.model
 
-import pl.matusiak.newdata.di.NetworkModule.Companion.IMAGE_URL
-import pl.matusiak.repository.MovieModel
+import pl.matusiak.data.di.NetworkModule.Companion.IMAGE_URL
+import pl.matusiak.data.model.appmodel.MovieModel
 
 fun MovieModel.toUiModel() = MovieUiModel(
     forAdult = forAdult,
