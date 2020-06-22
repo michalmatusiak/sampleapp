@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">sampleapp</string>
+    <string name="dashboard_search_movie">Wyszukaj filmu</string>
 </resources>

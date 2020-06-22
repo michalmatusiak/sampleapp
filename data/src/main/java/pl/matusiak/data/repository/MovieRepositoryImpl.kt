@@ -9,4 +9,10 @@ class MovieRepositoryImpl(private val movieService: MovieService) : MovieReposit
         movieService
             .getNowPlayingMovie()
             .map { dtoWrapper -> dtoWrapper.results.map { it.toModel() } }
+
+    override fun getSearchSuggestion(searchText: String): Single<List<MovieModel>> =
+        movieService
+            .searchSuggestion(searchText)
+            .map { dtoWrapper -> dtoWrapper.results.map { it.toModel() } }
+
 }

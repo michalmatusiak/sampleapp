@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import pl.matusiak.sampleapp.dashboard.DashboardViewModel
+import pl.matusiak.sampleapp.details.MovieDetailsViewModel
 
 @Module
 abstract class ViewModelModule {
@@ -17,5 +18,10 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(DashboardViewModel::class)
-    abstract fun bindSplashViewModel(splashViewModel: DashboardViewModel): ViewModel
+    abstract fun bindDashboardViewModel(splashViewModel: DashboardViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MovieDetailsViewModel::class)
+    abstract fun bindMovieDetailsViewModel(splashViewModel: MovieDetailsViewModel): ViewModel
 }

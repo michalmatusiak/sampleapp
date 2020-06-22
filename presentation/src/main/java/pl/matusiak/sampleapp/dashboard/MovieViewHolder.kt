@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.row_moview_item.view.*
 import pl.matusiak.data.di.NetworkModule.Companion.IMAGE_URL
-import pl.matusiak.data.repository.MovieModel
 import pl.matusiak.sampleapp.R
+import pl.matusiak.sampleapp.model.MovieUiModel
 
 class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -21,9 +21,10 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     fun bindItem(
-        movieModel: MovieModel,
+        movieModel: MovieUiModel,
         interactor: MoviePageListAdapter.MoviesListInteractor
     ) {
+        itemView.setOnClickListener { interactor.moviewItemClick(movieModel) }
         itemView.movieTitleText.text = movieModel.title
         itemView.movieDateText.text = movieModel.releaseDate
         itemView.movieDescriptionText.text = movieModel.overview
@@ -41,7 +42,7 @@ class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             .into(itemView.movieAvatarImage)
     }
 
-    private fun setStarState(movieModel: MovieModel) {
+    private fun setStarState(movieModel: MovieUiModel) {
         val imageRes = if (movieModel.isFavourite) {
             R.drawable.ic_star
         } else {

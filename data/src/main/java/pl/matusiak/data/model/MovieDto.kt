@@ -8,7 +8,7 @@ data class MovieDto(
     @SerializedName("adult")
     val forAdult: Boolean,
     @SerializedName("backdrop_path")
-    val backdropImagePath: String,
+    val backdropImagePath: String?,
     val id: Int,
     val overview: String,
     @SerializedName("release_date")

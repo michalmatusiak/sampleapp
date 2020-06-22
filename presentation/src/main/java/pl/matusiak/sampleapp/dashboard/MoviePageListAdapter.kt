@@ -2,12 +2,12 @@ package pl.matusiak.sampleapp.dashboard
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import pl.matusiak.data.repository.MovieModel
+import pl.matusiak.sampleapp.model.MovieUiModel
 
 class MoviePageListAdapter(private val interactor: MoviesListInteractor) :
     RecyclerView.Adapter<MovieViewHolder>() {
 
-    private val items = ArrayList<MovieModel>()
+    private val items = ArrayList<MovieUiModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         MovieViewHolder.createViewHolder(parent)
@@ -18,13 +18,13 @@ class MoviePageListAdapter(private val interactor: MoviesListInteractor) :
         holder.bindItem(items[position], interactor)
     }
 
-    fun setItems(listOf: List<MovieModel>) {
+    fun setItems(listOf: List<MovieUiModel>) {
         items.addAll(listOf)
         notifyDataSetChanged()
     }
 
     interface MoviesListInteractor {
-        fun movieStarClick(movieModel: MovieModel)
-        fun moviewItemClick(movieModel: MovieModel)
+        fun movieStarClick(movieModel: MovieUiModel)
+        fun moviewItemClick(movieModel: MovieUiModel)
     }
 }
