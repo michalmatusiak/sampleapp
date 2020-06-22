@@ -5,8 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.movie_details_fragment.*
+import pl.matusiak.data.di.NetworkModule
 import pl.matusiak.sampleapp.BR
 import pl.matusiak.sampleapp.R
 import pl.matusiak.sampleapp.core.di.ViewModelFactory
@@ -53,6 +57,14 @@ class MovieDetailsFragment : DaggerFragment() {
         movieUiModel?.let {
             viewModel.setViewModel(it)
         }
+
+        viewModel.imageUrlLiveData.observe(viewLifecycleOwner, Observer {
+            Glide
+                .with(requireContext())
+                .load("${NetworkModule.IMAGE_URL}${it}")
+                .centerCrop()
+                .into(movieAvatarImage)
+        })
     }
 
     private fun setupDataBindings() {

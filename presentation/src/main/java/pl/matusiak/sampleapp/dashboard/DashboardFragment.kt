@@ -51,26 +51,23 @@ class DashboardFragment : DaggerFragment(),
         super.onViewCreated(view, savedInstanceState)
         setupDataBindings()
         subscribeUi()
+        observeData()
+        viewModel.subscribe()
+    }
 
+    private fun observeData() {
         viewModel.movieList.observe(viewLifecycleOwner, Observer {
             moviePageListAdapter.setItems(it)
         })
 
         viewModel.suggestionList.observe(viewLifecycleOwner, Observer { it ->
-            autoCompleteTextView.post {
-                suggestionAdapter.clear()
+            suggestionAdapter.apply {
+                clear()
                 val map = it.map { it.title }
-                suggestionAdapter.addAll(map)
-                suggestionAdapter.notifyDataSetChanged()
+                addAll(map)
+                notifyDataSetChanged()
             }
-
-            autoCompleteTextView.handler.post {
-                autoCompleteTextView.showDropDown();
-            }
-
         })
-
-        viewModel.subscribe()
     }
 
     private fun subscribeUi() {
@@ -92,17 +89,20 @@ class DashboardFragment : DaggerFragment(),
             requireContext(),
             R.layout.support_simple_spinner_dropdown_item
         )
-        autoCompleteTextView.threshold = 1
-        autoCompleteTextView.setAdapter(suggestionAdapter)
-        autoCompleteTextView.onTextChanged {
-            viewModel.searchTextChanged(it)
+        autoCompleteTextView.apply {
+            setAdapter(suggestionAdapter)
+            onTextChanged {
+                viewModel.searchTextChanged(it)
+            }
         }
     }
 
     private fun setupDataBindings() {
-        viewDataBinding.setVariable(BR.viewModel, viewModel)
-        viewDataBinding.lifecycleOwner = this
-        viewDataBinding.executePendingBindings()
+        viewDataBinding.apply {
+            setVariable(BR.viewModel, viewModel)
+            lifecycleOwner = this@DashboardFragment
+            executePendingBindings()
+        }
     }
 
     override fun movieStarClick(movieModel: MovieUiModel) {
