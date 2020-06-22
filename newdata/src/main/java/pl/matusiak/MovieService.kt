@@ -9,13 +9,11 @@ interface MovieService {
 
     @GET("movie/now_playing")
     fun getNowPlayingMovie(
-        @Query("page") page: Int = 1,
-        @Query("api_key") key: String = "7530c8937040eb1ebebf8dfc68091acb"
+        @Query("page") page: Int = 1
     ): Single<MovieDtoWrapper>
 
     @GET("search/movie")
     fun searchSuggestion(
-        @Query("query") searchText: String,
-        @Query("api_key") key: String = "7530c8937040eb1ebebf8dfc68091acb"
+        @Query("query") searchText: String
     ): Single<MovieDtoWrapper>
 }

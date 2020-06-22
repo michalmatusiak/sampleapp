@@ -54,31 +54,35 @@ class DashboardFragment : DaggerFragment(),
         setupDataBindings()
         subscribeUi()
         observeData()
-
-    }
-
-    override fun onStart() {
-        super.onStart()
         viewModel.subscribe()
     }
 
-    override fun onStop() {
+    override fun onDestroyView() {
         viewModel.unsubscribe()
-        super.onStop()
+        super.onDestroyView()
     }
 
-    private fun observeData() {
-        viewModel.movieList.observe(viewLifecycleOwner, Observer {
-            moviePageListAdapter.setItems(it)
-        })
+    override fun movieStarClick(movieModel: MovieUiModel) {
+        viewModel.starClicked(movieModel)
+    }
 
-        viewModel.suggestionList.observe(viewLifecycleOwner, Observer { it ->
-            suggestionAdapter.apply {
-                clear()
-                addAll(it.map { it.title })
-                notifyDataSetChanged()
-            }
-        })
+    override fun moviewItemClick(movieModel: MovieUiModel) {
+        val supportFragmentManager = activity?.supportFragmentManager
+        val detailsFragment = MovieDetailsFragment.newInstance(movieModel)
+        supportFragmentManager?.apply {
+            beginTransaction()
+                .add(
+                    R.id.fragmentContainer,
+                    detailsFragment
+                )
+                .addToBackStack(null)
+                .commit()
+        }
+        detailsFragment.setDetailsInteractor(this)
+    }
+
+    override fun starInDetailsClicked(movieUiModel: MovieUiModel) {
+        moviePageListAdapter.refreshItem(movieUiModel)
     }
 
     private fun subscribeUi() {
@@ -105,27 +109,18 @@ class DashboardFragment : DaggerFragment(),
         }
     }
 
-    override fun movieStarClick(movieModel: MovieUiModel) {
-        viewModel.starClicked(movieModel)
-    }
+    private fun observeData() {
+        viewModel.movieList.observe(viewLifecycleOwner, Observer {
+            moviePageListAdapter.setItems(it)
+        })
 
-    override fun moviewItemClick(movieModel: MovieUiModel) {
-        val supportFragmentManager = activity?.supportFragmentManager
-        val detailsFragment = MovieDetailsFragment.newInstance(movieModel)
-        supportFragmentManager?.apply {
-            beginTransaction()
-                .add(
-                    R.id.fragmentContainer,
-                    detailsFragment
-                )
-                .addToBackStack(null)
-                .commit()
-        }
-        detailsFragment.setDetailsInteractor(this)
-    }
-
-    override fun starInDetailsClicked(movieUiModel: MovieUiModel) {
-        moviePageListAdapter.refreshItem(movieUiModel)
+        viewModel.suggestionList.observe(viewLifecycleOwner, Observer { it ->
+            suggestionAdapter.apply {
+                clear()
+                addAll(it.map { it.title })
+                notifyDataSetChanged()
+            }
+        })
     }
 
 }

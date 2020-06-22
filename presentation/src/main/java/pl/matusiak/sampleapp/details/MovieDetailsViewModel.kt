@@ -21,28 +21,31 @@ class MovieDetailsViewModel @Inject constructor(
     val imageUrlLiveData = MutableLiveData<String>()
     val backButtonClickLiveData = MutableLiveData<Boolean>()
 
-    private lateinit var model: MovieUiModel
+    private lateinit var movie: MovieUiModel
 
     fun setViewModel(movieUiModel: MovieUiModel) {
-        this.model = movieUiModel
-        imageUrlLiveData.postValue(model.backdropImagePath)
+        this.movie = movieUiModel
+        imageUrlLiveData.postValue(movie.backdropImagePath)
         titleLiveData.set(movieUiModel.title)
         dateLiveData.set(movieUiModel.releaseDate)
         descriptionLiveData.set(movieUiModel.overview)
-        val starRes = if (movieUiModel.isFavourite) R.drawable.ic_star else R.drawable.ic_empty_star
-        favouriteStarLiveData.set(starRes)
+        setFavouriteStarStatus(movieUiModel)
     }
 
     fun favouriteStarClicked(view: View? = null) {
-        model.isFavourite = !model.isFavourite
-        val starRes = if (model.isFavourite) R.drawable.ic_star else R.drawable.ic_empty_star
-        favouriteStarLiveData.set(starRes)
-        if (model.isFavourite) {
-            favouriteMoviesUseCase.addFavourite(model.id)
+        movie.isFavourite = !movie.isFavourite
+        setFavouriteStarStatus(movie)
+        if (movie.isFavourite) {
+            favouriteMoviesUseCase.addFavourite(movie.id)
         } else {
-            favouriteMoviesUseCase.removeFavourite(model.id)
+            favouriteMoviesUseCase.removeFavourite(movie.id)
         }
-        interactor.starInDetailsClicked(model)
+        interactor.starInDetailsClicked(movie)
+    }
+
+    private fun setFavouriteStarStatus(movieUiModel: MovieUiModel) {
+        val starRes = if (movieUiModel.isFavourite) R.drawable.ic_star else R.drawable.ic_empty_star
+        favouriteStarLiveData.set(starRes)
     }
 
     fun backClicked(view: View? = null) {

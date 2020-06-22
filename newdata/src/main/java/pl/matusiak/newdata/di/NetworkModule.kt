@@ -7,6 +7,7 @@ import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
 import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pl.matusiak.AuthInterceptor
 import pl.matusiak.MovieService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -38,21 +39,38 @@ class NetworkModule {
     internal fun provideMovieService(retrofit: Retrofit): MovieService =
         retrofit.create(MovieService::class.java)
 
+
     @Provides
     @Singleton
-    fun okHttpClient(): OkHttpClient {
+    fun provideAuthInterceptor() = AuthInterceptor()
+
+    @Provides
+    @Singleton
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
+        return interceptor
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideGson() = Gson()
+
+    @Provides
+    @Singleton
+    fun okHttpClient(
+        authInterceptor: AuthInterceptor,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): OkHttpClient {
+
         val builder = OkHttpClient.Builder()
         return builder
-            .addInterceptor(interceptor)
+            .addInterceptor(loggingInterceptor)
+            .addInterceptor(authInterceptor)
             .readTimeout(2, TimeUnit.MINUTES)
             .writeTimeout(2, TimeUnit.MINUTES)
             .connectTimeout(2, TimeUnit.MINUTES)
             .build()
     }
 
-    @Provides
-    @Singleton
-    internal fun provideGson() = Gson()
 }

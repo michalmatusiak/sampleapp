@@ -47,7 +47,6 @@ class DashboardViewModel @Inject constructor(
         }
     }
 
-
     fun starClicked(movieModel: MovieUiModel) {
         if (movieModel.isFavourite) {
             favouriteMoviesUseCase.addFavourite(movieModel.id)
@@ -100,11 +99,9 @@ class DashboardViewModel @Inject constructor(
                     movieList.postValue(it)
                 },
                 onError = {
-
+                    Timber.e(it)
                 }
             )
             .addTo(disposables)
     }
-
-
 }

@@ -58,6 +58,16 @@ class MovieDetailsViewModelTest {
         verify { mockInteractor.starInDetailsClicked(movieUiModel) }
     }
 
+    @Test
+    fun `should mark movie as not favourite and remove it in database`() {
+        val movieUiModel = getMockedMovieModel()
+        sut.setViewModel(movieUiModel)
+
+        sut.favouriteStarClicked()
+        verify { mockFavouriteMoviesUseCase.removeFavourite(123) }
+        verify { mockInteractor.starInDetailsClicked(movieUiModel) }
+    }
+
     private fun getMockedMovieModel() =
         MovieUiModel(
             forAdult = false,

@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.movie_details_fragment.*
-import pl.matusiak.newdata.di.NetworkModule.Companion.IMAGE_URL
 import pl.matusiak.sampleapp.BR
 import pl.matusiak.sampleapp.R
 import pl.matusiak.sampleapp.core.di.ViewModelFactory
@@ -54,27 +53,35 @@ class MovieDetailsFragment() : DaggerFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupDataBindings()
-        viewModel.setInteractor(interactor)
+        observeData()
+        checkArguments()
+    }
+
+    fun setDetailsInteractor(interactor: MovieDetailsInteractor) {
+        this.interactor = interactor
+    }
+
+    private fun checkArguments() {
         val movieUiModel = arguments?.getParcelable<MovieUiModel>(KEY_MOVIE_MODEL)
         movieUiModel?.let {
             viewModel.setViewModel(it)
+            viewModel.setInteractor(interactor)
         }
+    }
 
+    private fun observeData() {
         viewModel.imageUrlLiveData.observe(viewLifecycleOwner, Observer {
             Glide
                 .with(requireContext())
-                .load("$IMAGE_URL${it}")
+                .load(it)
                 .centerCrop()
+                .placeholder(R.drawable.ic_empty_star)
                 .into(movieAvatarImage)
         })
 
         viewModel.backButtonClickLiveData.observe(viewLifecycleOwner, Observer {
             activity?.onBackPressed()
         })
-    }
-
-    fun setDetailsInteractor(interactor: MovieDetailsInteractor) {
-        this.interactor = interactor
     }
 
     private fun setupDataBindings() {
