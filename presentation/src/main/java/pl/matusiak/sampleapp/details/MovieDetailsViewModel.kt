@@ -33,7 +33,7 @@ class MovieDetailsViewModel @Inject constructor(
         favouriteStarLiveData.set(starRes)
     }
 
-    fun favouriteStarClicked(view: View) {
+    fun favouriteStarClicked(view: View? = null) {
         model.isFavourite = !model.isFavourite
         val starRes = if (model.isFavourite) R.drawable.ic_star else R.drawable.ic_empty_star
         favouriteStarLiveData.set(starRes)
@@ -45,7 +45,7 @@ class MovieDetailsViewModel @Inject constructor(
         interactor.starInDetailsClicked(model)
     }
 
-    fun backClicked(view: View) {
+    fun backClicked(view: View? = null) {
         backButtonClickLiveData.postValue(true)
     }
 
